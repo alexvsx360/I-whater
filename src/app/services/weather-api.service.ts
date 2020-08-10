@@ -10,14 +10,14 @@ export class WeatherApiService {
   constructor(private http: HttpClient) {}
   getCity(cityName) {
     return this.http.get(
-      `http://dataservice.accuweather.com/locations/v1/cities/search?apikey=0EaIU0suqEyWJtFFS6qC7DavWg6GSofL&q=${cityName}`
+      `https://dataservice.accuweather.com/locations/v1/cities/search?apikey=0EaIU0suqEyWJtFFS6qC7DavWg6GSofL&q=${cityName}`
     );
   }
 
   getWeather(cityKey, metric) {
     return this.http
       .get(
-        `http://dataservice.accuweather.com/forecasts/v1/daily/5day/${cityKey}?apikey=0EaIU0suqEyWJtFFS6qC7DavWg6GSofL&metric=${metric}`
+        `https://dataservice.accuweather.com/forecasts/v1/daily/5day/${cityKey}?apikey=0EaIU0suqEyWJtFFS6qC7DavWg6GSofL&metric=${metric}`
       )
       .pipe(catchError(this.eh));
   }
@@ -25,7 +25,7 @@ export class WeatherApiService {
   completeCityName(name) {
     return this.http
       .get(
-        `http://dataservice.accuweather.com/locations/v1/cities/autocomplete?apikey=0EaIU0suqEyWJtFFS6qC7DavWg6GSofL&q=${name}`
+        `https://dataservice.accuweather.com/locations/v1/cities/autocomplete?apikey=0EaIU0suqEyWJtFFS6qC7DavWg6GSofL&q=${name}`
       )
       .pipe(catchError(this.eh));
   }

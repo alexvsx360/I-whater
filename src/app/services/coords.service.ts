@@ -17,7 +17,7 @@ export class CoordsService {
   getCityLocation(lat, lon) {
     return this.http
       .get(
-        `http://dataservice.accuweather.com//locations/v1/cities/geoposition/search?apikey=rcpEvtoLANBcKRiT9ZwL2mEBWfBN5GLO&q=${lat},${lon}`
+        `https://dataservice.accuweather.com//locations/v1/cities/geoposition/search?apikey=rcpEvtoLANBcKRiT9ZwL2mEBWfBN5GLO&q=${lat},${lon}`
       )
       .pipe(catchError(this.eh));
   }
