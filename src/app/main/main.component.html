@@ -132,9 +132,8 @@
     <mat-card
       class="card"
       [ngStyle]="{
-        'background-image': 'url(assets/img/' + da.Day.Icon + '.png)'
+        'background-image': 'url(../assets/img/' + da.Day.Icon + '.png)'
       }"
-      style="background-image: url(assets/img/1.png);"
       *ngFor="let da of dataForecasts.DailyForecasts"
     >
       <h2>{{ da.Date | date: "MMMM d" }}</h2>
@@ -151,9 +150,8 @@
     <mat-card
       class="card"
       [ngStyle]="{
-        'background-image': 'url(assets/img/' + da.Night.Icon + '.png)'
+        'background-image': 'url(../assets/img/' + da.Night.Icon + '.png)'
       }"
-      style="background-image: url(assets/img/1.png);"
       *ngFor="let da of dataForecasts.DailyForecasts"
     >
       <h2>{{ da.Date | date: "MMMM d" }}</h2>
