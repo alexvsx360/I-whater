@@ -1,18 +1,60 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { BrowserModule } from "@angular/platform-browser";
+import { NgModule } from "@angular/core";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { FormsModule } from "@angular/forms";
+import {
+  MatInputModule,
+  MatOptionModule,
+  MatAutocompleteModule,
+  MatFormFieldModule,
+  MatCardModule,
+  MatButtonModule,
+  MatGridListModule,
+  MatToolbarModule,
+  MatIconModule,
+  MatProgressSpinnerModule,
+  MatDialogModule,
+} from "@angular/material";
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+import { AppRoutingModule } from "./app-routing.module";
+import { AppComponent } from "./app.component";
+import { HeaderComponent } from "./header/header.component";
+import { FooterComponent } from "./footer/footer.component";
+import { MainComponent } from "./main/main.component";
+import { FavoriteComponent } from "./favorite/favorite.component";
+import { HttpClientModule } from "@angular/common/http";
+import { PageNotFoundComponent } from "./page-not-found/page-not-found.component";
+import { WelcomeComponent } from "./welcome/welcome.component";
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    HeaderComponent,
+    FooterComponent,
+    MainComponent,
+    FavoriteComponent,
+    PageNotFoundComponent,
+    WelcomeComponent,
   ],
   imports: [
+    MatDialogModule,
+    MatProgressSpinnerModule,
+    MatIconModule,
+    MatToolbarModule,
+    MatGridListModule,
+    MatButtonModule,
+    MatCardModule,
+    MatAutocompleteModule,
+    MatFormFieldModule,
+    MatOptionModule,
+    FormsModule,
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    MatInputModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

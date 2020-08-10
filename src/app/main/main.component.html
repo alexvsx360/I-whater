@@ -1,0 +1,174 @@
+<mat-card class="container" *ngIf="dataForecasts !== null && cityData !== null">
+  <div class="main">
+    <div class="content">
+      <form class="search-form">
+        <mat-form-field class="example-full-width">
+          <input
+            #search
+            name="search"
+            type="text"
+            placeholder="Search.."
+            aria-label="Number"
+            matInput
+            (keyup)="completeName(search.value)"
+            [matAutocomplete]="auto"
+          />
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option
+              *ngFor="let item of searchData"
+              [value]="item.LocalizedName"
+              (click)="getWeather(item.LocalizedName)"
+            >
+              {{ item.LocalizedName }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </form>
+
+      <mat-card
+        class="main-data-card"
+        *ngIf="dataForecasts !== null && cityData !== null"
+      >
+        <div class="city-img">
+          <img [src]="cityImg" alt="" />
+        </div>
+        <div class="city-name">
+          <h1>
+            {{ cityData[0].LocalizedName }}
+          </h1>
+          <p *ngIf="farOrCel === true">
+            {{
+              dataForecasts.DailyForecasts[0].Temperature.Minimum.Value +
+                " &#8451; - " +
+                dataForecasts.DailyForecasts[0].Temperature.Maximum.Value +
+                " &#8451;"
+            }}
+          </p>
+          <p *ngIf="farOrCel === false">
+            {{
+              dataForecasts.DailyForecasts[0].Temperature.Minimum.Value +
+                " &#8457; - " +
+                dataForecasts.DailyForecasts[0].Temperature.Maximum.Value +
+                " &#8457;"
+            }}
+          </p>
+        </div>
+
+        <div class="button-container">
+          <div class="example-button-container" *ngIf="night === true">
+            <button
+              (click)="changeDayNight()"
+              mat-fab
+              color="primary"
+              aria-label="Example icon button"
+            >
+              <mat-icon>wb_sunny</mat-icon>
+            </button>
+          </div>
+          <div class="example-button-container" *ngIf="day === true">
+            <button
+              (click)="changeDayNight()"
+              mat-fab
+              color="primary"
+              aria-label="Example icon button"
+            >
+              <mat-icon>brightness_3</mat-icon>
+            </button>
+          </div>
+          <div class="example-button-container" *ngIf="farOrCel === true">
+            <button
+              (click)="fahrenheitOrCelsius(cityData[0].LocalizedName)"
+              mat-fab
+              color="primary"
+              aria-label="Example icon button"
+            >
+              &#8451;
+            </button>
+          </div>
+
+          <div class="example-button-container" *ngIf="farOrCel === false">
+            <button
+              (click)="fahrenheitOrCelsius(cityData[0].LocalizedName)"
+              mat-fab
+              color="primary"
+              aria-label="Example icon button"
+            >
+              &#8457;
+            </button>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+    <button
+      *ngIf="inFavorite === false"
+      mat-raised-button
+      color="primary"
+      (click)="
+        addToFavorite(
+          cityData[0].LocalizedName,
+          cityData[0].Key,
+          dataForecasts.DailyForecasts[0].Temperature.Minimum.Value,
+          cityImg,
+          dataForecasts.DailyForecasts[0].Day.IconPhrase,
+          dataForecasts.DailyForecasts[0].Temperature.Minimum.Unit
+        )
+      "
+    >
+      <i class="fas fa-heart"></i> Add to favorit
+    </button>
+    <button
+      *ngIf="inFavorite === true"
+      mat-raised-button
+      disabled
+      color="primary"
+    >
+      <i class="fas fa-heart"></i> In Favorite
+    </button>
+  </div>
+  <div
+    class="cards"
+    *ngIf="dataForecasts !== null && cityData !== null && day === true"
+  >
+    <mat-card
+      class="card"
+      [ngStyle]="{
+        'background-image': 'url(../../assets/img/' + da.Day.Icon + '.png)'
+      }"
+      style="background-image: url(../../assets/img/1.png);"
+      *ngFor="let da of dataForecasts.DailyForecasts"
+    >
+      <h2>{{ da.Date | date: "MMMM d" }}</h2>
+      <p *ngIf="farOrCel === true">{{ da.Temperature.Maximum.Value }}&#8451;</p>
+      <p *ngIf="farOrCel === false">
+        {{ da.Temperature.Maximum.Value }}&#8457;
+      </p>
+    </mat-card>
+  </div>
+  <div
+    class="cards"
+    *ngIf="dataForecasts !== null && cityData !== null && night === true"
+  >
+    <mat-card
+      class="card"
+      [ngStyle]="{
+        'background-image': 'url(../../assets/img/' + da.Night.Icon + '.png)'
+      }"
+      style="background-image: url(../../assets/img/1.png);"
+      *ngFor="let da of dataForecasts.DailyForecasts"
+    >
+      <h2>{{ da.Date | date: "MMMM d" }}</h2>
+      <p *ngIf="farOrCel === true">{{ da.Temperature.Minimum.Value }}&#8451;</p>
+      <p *ngIf="farOrCel === false">
+        {{ da.Temperature.Minimum.Value }}&#8457;
+      </p>
+    </mat-card>
+  </div>
+</mat-card>
+<div class="messages-container">
+  <div class="message-danger" *ngIf="messageDanger !== null">
+    {{ messageDanger }}
+  </div>
+  <div class="message-good" *ngIf="messageGood !== null">
+    {{ messageGood }}
+  </div>
+</div>

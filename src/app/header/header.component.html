@@ -1,0 +1,31 @@
+<header>
+  <mat-toolbar color="primary" class="container">
+    <h1><i class="fas fa-cloud-sun"></i> IWeather</h1>
+
+    <div class="options">
+      <button
+        mat-icon-button
+        class="example-icon"
+        aria-label="Example icon-button "
+        routerLink="/favorites"
+      >
+        <span class="btnText">Favorite&nbsp;</span>
+        <mat-icon style="font-size: xx-large;">favorite</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        class="example-icon"
+        aria-label="Example icon-button "
+        routerLink="/main"
+      >
+        <span class="btnText">Home&nbsp;</span>
+        <mat-icon style="font-size: xx-large;">home</mat-icon>
+      </button>
+    </div>
+  </mat-toolbar>
+</header>
+<div class="messages-container">
+  <div class="message-danger" *ngIf="messageDanger !== null">
+    <p>{{ messageDanger }}</p>
+  </div>
+</div>

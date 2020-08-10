@@ -1,0 +1,36 @@
+<h1>Favorit Cities</h1>
+<div *ngIf="favorite && favorite.length; else noFavorite">
+  <mat-card class="container">
+    <mat-card
+      class="card"
+      [ngStyle]="{
+        'background-image': 'url(' + item.cityImg + ')'
+      }"
+      *ngFor="let item of favorite; let i = index"
+      class="card"
+    >
+      <h2>{{ item.cityName }}</h2>
+      <p *ngIf="item.unit == 'C'">{{ item.cityW }} &#8451;</p>
+      <p *ngIf="item.unit == 'F'">{{ item.cityW }} &#8457;</p>
+      <p>{{ item.cityStatus }}</p>
+
+      <div class="icon-Warp">
+        <button
+          routerLink="/location/{{ item.cityName }}"
+          color="primary"
+          mat-mini-fab
+        >
+          <mat-icon>remove_red_eye</mat-icon>
+        </button>
+        <button (click)="removeFromFavorite(i)" color="warn" mat-mini-fab>
+          <mat-icon>restore_from_trash</mat-icon>
+        </button>
+      </div>
+    </mat-card>
+  </mat-card>
+</div>
+<ng-template #noFavorite>
+  <mat-card class="container">
+    <h2>No Favorite Cities in the list</h2>
+  </mat-card>
+</ng-template>

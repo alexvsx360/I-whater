@@ -1,0 +1,55 @@
+.container {
+  margin: auto;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  width: 70%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  flex-direction: row;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  animation: fadein 3s;
+}
+.icon-Warp {
+  width: 100%;
+  padding-top: 40px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.card {
+  margin: 20px;
+  width: 150px;
+  height: 250px;
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+h2 {
+  text-shadow: 1px 1px 2px whitesmoke, 1px -1px 2px whitesmoke,
+    -1px 1px 2px whitesmoke, -1px -1px 2px whitesmoke;
+}
+h1 {
+  margin: 30px;
+  text-align: center;
+  animation: fadein 2s;
+}
+p {
+  font-weight: bold;
+  text-shadow: 1px 1px 0 whitesmoke, 1px -1px 0 whitesmoke,
+    -1px 1px 0 whitesmoke, -1px -1px 0 whitesmoke;
+}
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
