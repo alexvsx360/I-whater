@@ -26,6 +26,7 @@ export class MainComponent implements OnInit {
   messageGood = null;
   inFavorite = false;
   favorites;
+  search;
   constructor(
     private store: Store<{ favorite: { favorite: Favorite[] } }>,
     private coordsService: CoordsService,

@@ -1,28 +1,44 @@
 <mat-card class="container" *ngIf="dataForecasts !== null && cityData !== null">
   <div class="main">
     <div class="content">
-      <form class="search-form">
+      <form class="search-form" #searchform="ngForm">
         <mat-form-field class="example-full-width">
+          <label for="search">Search City Name </label>
           <input
-            #search
+            [(ngModel)]="search"
+            #searchF="ngModel"
+            required
             name="search"
             type="text"
-            placeholder="Search.."
+            id="search"
             aria-label="Number"
             matInput
-            (keyup)="completeName(search.value)"
+            (keyup)="completeName(searchF.value)"
             [matAutocomplete]="auto"
+            pattern="[a-zA-Z ]+"
           />
+
           <mat-autocomplete #auto="matAutocomplete">
-            <mat-option
-              *ngFor="let item of searchData"
-              [value]="item.LocalizedName"
-              (click)="getWeather(item.LocalizedName)"
-            >
-              {{ item.LocalizedName }}
-            </mat-option>
+            <div *ngIf="!searchF.errors">
+              <mat-option
+                *ngFor="let item of searchData"
+                [value]="item.LocalizedName"
+                (click)="getWeather(item.LocalizedName)"
+              >
+                {{ item.LocalizedName }}
+              </mat-option>
+            </div>
           </mat-autocomplete>
         </mat-form-field>
+        <div
+          *ngIf="searchF.errors?.required && searchF.touched"
+          class="invalid-feedback"
+        >
+          City name is required
+        </div>
+        <div *ngIf="searchF.errors?.pattern" class="invalid-feedback">
+          City name has to contain only english letters and spaces
+        </div>
       </form>
 
       <mat-card

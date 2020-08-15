@@ -3,6 +3,10 @@
   align-items: center;
   justify-content: space-around;
 }
+.invalid-feedback {
+  color: lightcoral;
+  margin: 10px;
+}
 .message-good {
   text-align: center;
   z-index: 10000;
