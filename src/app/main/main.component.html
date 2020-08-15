@@ -104,14 +104,14 @@
       mat-raised-button
       color="primary"
       (click)="
-        addToFavorite(
-          cityData[0].LocalizedName,
-          cityData[0].Key,
-          dataForecasts.DailyForecasts[0].Temperature.Minimum.Value,
-          cityImg,
-          dataForecasts.DailyForecasts[0].Day.IconPhrase,
-          dataForecasts.DailyForecasts[0].Temperature.Minimum.Unit
-        )
+        addToFavorite({
+          cityName: cityData[0].LocalizedName,
+          cityId: cityData[0].Key,
+          cityW: dataForecasts.DailyForecasts[0].Temperature.Minimum.Value,
+          cityImg: cityImg,
+          cityStatus: dataForecasts.DailyForecasts[0].Day.IconPhrase,
+          unit: dataForecasts.DailyForecasts[0].Temperature.Minimum.Unit
+        })
       "
     >
       <i class="fas fa-heart"></i> Add to favorit

@@ -4,6 +4,9 @@ import { FavoriteService } from "../services/favorite.service";
 import { CoordsService } from "../services/coords.service";
 import { ActivatedRoute } from "@angular/router";
 import * as _ from "lodash";
+import { Store } from "@ngrx/store";
+import { Favorite } from "../models/favorite";
+
 @Component({
   selector: "app-main",
   templateUrl: "./main.component.html",
@@ -22,7 +25,9 @@ export class MainComponent implements OnInit {
   messageDanger = null;
   messageGood = null;
   inFavorite = false;
+  favorites;
   constructor(
+    private store: Store<{ favorite: { favorite: Favorite[] } }>,
     private coordsService: CoordsService,
     private activatedRoute: ActivatedRoute,
     private weatherApiService: WeatherApiService,
@@ -30,6 +35,9 @@ export class MainComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.store.select("favorite").subscribe((res) => {
+      this.favorites = Object.values(res);
+    });
     this.coordsService.currentLocation.subscribe((res) => {
       if (!_.isEmpty(res)) {
         this.location = res;
@@ -47,8 +55,15 @@ export class MainComponent implements OnInit {
     }
   }
   getWeather(cityName) {
-    var inFav = this.favoriteService.chackFavorit(cityName);
-    this.inFavorite = inFav;
+    this.inFavorite = false;
+    if (this.favorites[0].length > 0) {
+      this.favorites[0].forEach((element) => {
+        if (_.includes(element, cityName) == true) {
+          this.inFavorite = true;
+        }
+      });
+    }
+
     this.weatherApiService.getCity(cityName).subscribe(
       (res) => {
         this.cityData = null;
@@ -108,15 +123,8 @@ export class MainComponent implements OnInit {
       }
     );
   }
-  addToFavorite(cityName, cityId, cityW, cityImg, cityStatus, unit) {
-    this.favoriteService.addToFavorite(
-      cityName,
-      cityId,
-      cityW,
-      cityImg,
-      cityStatus,
-      unit
-    );
+  addToFavorite(cityData: Favorite) {
+    this.favoriteService.addToFavorite(cityData);
     this.messageGood = "City Add to Favorit";
     this.inFavorite = true;
     setTimeout(() => {

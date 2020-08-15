@@ -1,12 +1,12 @@
 <h1>Favorit Cities</h1>
-<div *ngIf="favorite && favorite.length; else noFavorite">
+<div *ngIf="favorites[0].length > 0; else noFavorite">
   <mat-card class="container">
     <mat-card
       class="card"
       [ngStyle]="{
         'background-image': 'url(' + item.cityImg + ')'
       }"
-      *ngFor="let item of favorite; let i = index"
+      *ngFor="let item of favorites[0]; let i = index"
       class="card"
     >
       <h2>{{ item.cityName }}</h2>

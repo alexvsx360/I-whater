@@ -14,6 +14,7 @@ import {
   MatIconModule,
   MatProgressSpinnerModule,
   MatDialogModule,
+  MatBadgeModule,
 } from "@angular/material";
 
 import { AppRoutingModule } from "./app-routing.module";
@@ -25,7 +26,8 @@ import { FavoriteComponent } from "./favorite/favorite.component";
 import { HttpClientModule } from "@angular/common/http";
 import { PageNotFoundComponent } from "./page-not-found/page-not-found.component";
 import { WelcomeComponent } from "./welcome/welcome.component";
-
+import { StoreModule } from "@ngrx/store";
+import { favoriteReducer } from "./favorite/store/favorite.reducer";
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,9 +39,11 @@ import { WelcomeComponent } from "./welcome/welcome.component";
     WelcomeComponent,
   ],
   imports: [
+    StoreModule.forRoot({ favorite: favoriteReducer }),
     MatDialogModule,
     MatProgressSpinnerModule,
     MatIconModule,
+    MatBadgeModule,
     MatToolbarModule,
     MatGridListModule,
     MatButtonModule,

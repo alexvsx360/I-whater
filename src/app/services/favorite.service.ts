@@ -1,41 +1,26 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject } from "rxjs";
+import { Observable } from "rxjs";
 import * as _ from "lodash";
+import { Favorite } from "../models/favorite";
+
+import { Store } from "@ngrx/store";
+import * as FavoriteActions from "../favorite/store/favorite.actions";
 @Injectable({
   providedIn: "root",
 })
 export class FavoriteService {
-  favoriteArray = [];
-  private favoriteSource = new BehaviorSubject<Array<any>>([]);
-  currentFavorite = this.favoriteSource.asObservable();
+  favoriteArray: Observable<{ favorite: Favorite[] }>;
+  //  private favoriteSource = new BehaviorSubject<
+  //    Observable<{ favorite: Favorite[] }>
+  //  >;
+  // currentFavorite = this.favoriteSource.asObservable();
 
-  constructor() {}
-  addToFavorite(cityName, cityId, cityW, cityImg, cityStatus, unit) {
-    this.favoriteArray.push({
-      cityName: cityName,
-      cityId: cityId,
-      cityW: cityW,
-      cityImg: cityImg,
-      cityStatus: cityStatus,
-      unit: unit,
-    });
-
-    this.favoriteSource.next(this.favoriteArray);
-  }
-  chackFavorit(cityName) {
-    if (this.favoriteArray && this.favoriteArray.length) {
-      var item = _.find(this.favoriteArray, ["cityName", cityName]);
-      if (item == undefined) {
-        return false;
-      } else {
-        return true;
-      }
-    } else {
-      return false;
-    }
+  constructor(private store: Store<{ favorite: { favorite: Favorite[] } }>) {}
+  addToFavorite(cityData: Favorite) {
+    const newFavorite = cityData;
+    this.store.dispatch(new FavoriteActions.AddToFavorite(newFavorite));
   }
   removeFromFavorite(index) {
-    this.favoriteArray.splice(index, 1);
-    this.favoriteSource.next(this.favoriteArray);
+    this.store.dispatch(new FavoriteActions.DeleteFromFavorite(index));
   }
 }

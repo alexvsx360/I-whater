@@ -4,6 +4,7 @@
 
     <div class="options">
       <button
+        *ngIf="favorites[0].length == 0"
         mat-icon-button
         class="example-icon"
         aria-label="Example icon-button "
@@ -11,6 +12,22 @@
       >
         <span class="btnText">Favorite&nbsp;</span>
         <mat-icon style="font-size: xx-large;">favorite</mat-icon>
+      </button>
+      <button
+        *ngIf="favorites[0].length > 0"
+        mat-icon-button
+        class="example-icon"
+        aria-label="Example icon-button "
+        routerLink="/favorites"
+      >
+        <span class="btnText">Favorite&nbsp;</span>
+        <mat-icon
+          matBadge="{{ favorites[0].length }}"
+          matBadgeColor="warn"
+          style="font-size: xx-large;"
+          >favorite</mat-icon
+        >
+        <span class="cdk-visually-hidden"> </span>
       </button>
       <button
         mat-icon-button
