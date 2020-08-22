@@ -1,6 +1,5 @@
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import * as _ from "lodash";
 import { Favorite } from "../models/favorite";
 
 import { Store } from "@ngrx/store";
@@ -10,10 +9,6 @@ import * as FavoriteActions from "../favorite/store/favorite.actions";
 })
 export class FavoriteService {
   favoriteArray: Observable<{ favorite: Favorite[] }>;
-  //  private favoriteSource = new BehaviorSubject<
-  //    Observable<{ favorite: Favorite[] }>
-  //  >;
-  // currentFavorite = this.favoriteSource.asObservable();
 
   constructor(private store: Store<{ favorite: { favorite: Favorite[] } }>) {}
   addToFavorite(cityData: Favorite) {

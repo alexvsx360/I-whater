@@ -1,6 +1,5 @@
 import { Component, OnInit } from "@angular/core";
 import { CoordsService } from "../services/coords.service";
-import * as _ from "lodash";
 import { Store } from "@ngrx/store";
 import { Favorite } from "../models/favorite";
 
@@ -10,10 +9,10 @@ import { Favorite } from "../models/favorite";
   styleUrls: ["./header.component.css"],
 })
 export class HeaderComponent implements OnInit {
-  lat = null;
-  lon = null;
-  messageDanger = null;
-  favorites;
+  lat: number;
+  lon: number;
+  messageDanger: string = null;
+  favorites: Array<Favorite[]>;
   constructor(
     private store: Store<{ favorite: { favorite: Favorite[] } }>,
     private coordsService: CoordsService
@@ -29,23 +28,26 @@ export class HeaderComponent implements OnInit {
         this.lon = res.coords.longitude;
         this.coordsService.getCityLocation(this.lat, this.lon).subscribe(
           (res) => {
-            if (!_.isEmpty(res)) {
+            if (res !== null) {
               this.coordsService.gotLocation(res);
             }
           },
           (err) => {
-            this.messageDanger = err.status + " " + err.statusText;
+            let message = err.status + " " + err.statusText;
+            this.showDangerMsg(message);
           }
         );
       },
       (err) => {
-        this.messageDanger = err.message;
-        setTimeout(() => {
-          setTimeout(() => {
-            this.messageDanger = null;
-          });
-        }, 3000);
+        let message = err.message;
+        this.showDangerMsg(message);
       }
     );
+  }
+  showDangerMsg(message) {
+    this.messageDanger = message;
+    setTimeout(() => {
+      this.messageDanger = null;
+    }, 3400);
   }
 }

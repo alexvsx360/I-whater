@@ -10,13 +10,13 @@
       class="card"
     >
       <h2>{{ item.cityName }}</h2>
-      <p *ngIf="item.unit == 'C'">{{ item.cityW }} &#8451;</p>
-      <p *ngIf="item.unit == 'F'">{{ item.cityW }} &#8457;</p>
+      <p>{{ item.cityW }} &#8451;</p>
+
       <p>{{ item.cityStatus }}</p>
 
       <div class="icon-Warp">
         <button
-          routerLink="/location/{{ item.cityName }}"
+          routerLink="/main/{{ item.cityName }}"
           color="primary"
           mat-mini-fab
         >

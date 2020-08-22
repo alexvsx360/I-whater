@@ -3,9 +3,10 @@ import { WeatherApiService } from "../services/weather-api.service";
 import { FavoriteService } from "../services/favorite.service";
 import { CoordsService } from "../services/coords.service";
 import { ActivatedRoute } from "@angular/router";
-import * as _ from "lodash";
 import { Store } from "@ngrx/store";
 import { Favorite } from "../models/favorite";
+import { Router } from "@angular/router";
+import { promise } from "protractor";
 
 @Component({
   selector: "app-main",
@@ -16,18 +17,18 @@ export class MainComponent implements OnInit {
   getCityOnInit = false;
   location = null;
   farOrCel: boolean = true;
-  day = true;
-  night = false;
+  dayNight: boolean = true;
   dataForecasts = null;
   cityData = null;
   searchData: any;
-  cityImg = null;
-  messageDanger = null;
-  messageGood = null;
-  inFavorite = false;
-  favorites;
-  search;
+  cityImg: string = null;
+  messageDanger: string = null;
+  messageGood: string = null;
+  inFavorite: boolean = false;
+  favorites: Array<Favorite[]>;
+  search: string;
   constructor(
+    private router: Router,
     private store: Store<{ favorite: { favorite: Favorite[] } }>,
     private coordsService: CoordsService,
     private activatedRoute: ActivatedRoute,
@@ -39,27 +40,33 @@ export class MainComponent implements OnInit {
     this.store.select("favorite").subscribe((res) => {
       this.favorites = Object.values(res);
     });
-    this.coordsService.currentLocation.subscribe((res) => {
-      if (!_.isEmpty(res)) {
+
+    this.coordsService.currentLocation.subscribe(
+      (res) => {
         this.location = res;
-      } else {
-        console.log("! No Corrent Location");
+      },
+      (err) => {
+        let message = err.status + " " + err.statusText;
+        this.showDangerMsg(message);
       }
-    });
-    if (this.activatedRoute.snapshot.params["cityKey"]) {
-      let rourParam = this.activatedRoute.snapshot.params["cityKey"];
-      this.getWeather(rourParam);
-    } else if (this.location !== null) {
-      this.getWeather(this.location.EnglishName);
-    } else {
-      this.getWeather("Tel Aviv");
-    }
+    );
+    setTimeout(() => {
+      if (this.activatedRoute.snapshot.params["cityKey"]) {
+        let rourParam = this.activatedRoute.snapshot.params["cityKey"];
+        this.getWeather(rourParam);
+      } else if (this.location !== null) {
+        this.getWeather(this.location.EnglishName);
+      } else {
+        this.getWeather("Tel Aviv");
+      }
+    }, 200);
   }
-  getWeather(cityName) {
+
+  getWeather(cityName: string) {
     this.inFavorite = false;
     if (this.favorites[0].length > 0) {
       this.favorites[0].forEach((element) => {
-        if (_.includes(element, cityName) == true) {
+        if (element.cityName == cityName) {
           this.inFavorite = true;
         }
       });
@@ -67,18 +74,21 @@ export class MainComponent implements OnInit {
 
     this.weatherApiService.getCity(cityName).subscribe(
       (res) => {
-        this.cityData = null;
-        this.cityData = res;
+        if (!res[0].length) {
+          this.cityData = res;
+        } else {
+          this.router.navigateByUrl("/main");
+        }
+
         var cityKey = parseInt(this.cityData[0].Key);
-        this.weatherApiService.getWeather(cityKey, this.farOrCel).subscribe(
+
+        this.weatherApiService.getWeather(cityKey).subscribe(
           (res) => {
             this.dataForecasts = res;
           },
           (err) => {
-            this.messageDanger = err.status + " " + err.statusText;
-            setTimeout(() => {
-              this.messageDanger = null;
-            }, 3400);
+            let message = err.status + " " + err.statusText;
+            this.showDangerMsg(message);
           }
         );
 
@@ -86,27 +96,22 @@ export class MainComponent implements OnInit {
           (res) => {
             var daf =
               "https://cdn.pixabay.com/photo/2014/09/16/18/28/potatoes-448613_960_720.jpg";
-            this.cityImg = res;
-
-            if (this.cityImg.total == 0) {
+            let img = res;
+            if (img["total"] == 0) {
               this.cityImg = daf;
             } else {
-              this.cityImg = this.cityImg.hits[0].previewURL;
+              this.cityImg = img["hits"][0].previewURL;
             }
           },
           (err) => {
-            this.messageDanger = err.status + " " + err.statusText;
-            setTimeout(() => {
-              this.messageDanger = null;
-            }, 3400);
+            let message = err.status + " " + err.statusText;
+            this.showDangerMsg(message);
           }
         );
       },
       (err) => {
-        this.messageDanger = err.status + " " + err.statusText;
-        setTimeout(() => {
-          this.messageDanger = null;
-        }, 3400);
+        let message = err.status + " " + err.statusText;
+        this.showDangerMsg(message);
       }
     );
   }
@@ -117,37 +122,33 @@ export class MainComponent implements OnInit {
         this.searchData = res;
       },
       (err) => {
-        this.messageDanger = err.status + " " + err.statusText;
-        setTimeout(() => {
-          this.messageDanger = null;
-        }, 3400);
+        let message = err.status + " " + err.statusText;
+        this.showDangerMsg(message);
       }
     );
   }
   addToFavorite(cityData: Favorite) {
     this.favoriteService.addToFavorite(cityData);
-    this.messageGood = "City Add to Favorit";
+    let message = "City Add to Favorit";
+    this.showGoodMsg(message);
     this.inFavorite = true;
+  }
+  changeDayNight() {
+    this.dayNight = !this.dayNight;
+  }
+  fahrenheitOrCelsius() {
+    this.farOrCel = !this.farOrCel;
+  }
+  showDangerMsg(message) {
+    this.messageDanger = message;
+    setTimeout(() => {
+      this.messageDanger = null;
+    }, 3400);
+  }
+  showGoodMsg(message) {
+    this.messageGood = message;
     setTimeout(() => {
       this.messageGood = null;
     }, 3100);
-  }
-  changeDayNight() {
-    if (this.day === true) {
-      this.day = false;
-      this.night = true;
-    } else {
-      this.day = true;
-      this.night = false;
-    }
-  }
-  fahrenheitOrCelsius(cityName) {
-    if (this.farOrCel === true) {
-      this.farOrCel = false;
-      this.getWeather(cityName);
-    } else {
-      this.farOrCel = true;
-      this.getWeather(cityName);
-    }
   }
 }

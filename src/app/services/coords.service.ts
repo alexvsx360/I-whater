@@ -22,7 +22,7 @@ export class CoordsService {
       .pipe(catchError(this.eh));
   }
   eh(error: HttpErrorResponse) {
-    return throwError(error || "server error heare");
+    return throwError(error || "server error ");
   }
   gotLocation(location) {
     this.locationSource.next(location);

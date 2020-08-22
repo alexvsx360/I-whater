@@ -46,13 +46,13 @@
         *ngIf="dataForecasts !== null && cityData !== null"
       >
         <div class="city-img">
-          <img [src]="cityImg" alt="" />
+          <img *ngIf="cityImg" [src]="cityImg" alt="" />
         </div>
         <div class="city-name">
           <h1>
             {{ cityData[0].LocalizedName }}
           </h1>
-          <p *ngIf="farOrCel === true">
+          <p *ngIf="farOrCel">
             {{
               dataForecasts.DailyForecasts[0].Temperature.Minimum.Value +
                 " &#8451; - " +
@@ -60,18 +60,21 @@
                 " &#8451;"
             }}
           </p>
-          <p *ngIf="farOrCel === false">
+          <p *ngIf="!farOrCel">
             {{
-              dataForecasts.DailyForecasts[0].Temperature.Minimum.Value +
+              (dataForecasts.DailyForecasts[0].Temperature.Minimum.Value * 1.8 +
+                32 | number: "1.1-1") +
                 " &#8457; - " +
-                dataForecasts.DailyForecasts[0].Temperature.Maximum.Value +
+                (dataForecasts.DailyForecasts[0].Temperature.Maximum.Value *
+                  1.8 +
+                  32 | number: "1.1-1") +
                 " &#8457;"
             }}
           </p>
         </div>
 
         <div class="button-container">
-          <div class="example-button-container" *ngIf="night === true">
+          <div class="example-button-container" *ngIf="dayNight">
             <button
               (click)="changeDayNight()"
               mat-fab
@@ -81,7 +84,7 @@
               <mat-icon>wb_sunny</mat-icon>
             </button>
           </div>
-          <div class="example-button-container" *ngIf="day === true">
+          <div class="example-button-container" *ngIf="!dayNight">
             <button
               (click)="changeDayNight()"
               mat-fab
@@ -91,9 +94,9 @@
               <mat-icon>brightness_3</mat-icon>
             </button>
           </div>
-          <div class="example-button-container" *ngIf="farOrCel === true">
+          <div class="example-button-container" *ngIf="farOrCel">
             <button
-              (click)="fahrenheitOrCelsius(cityData[0].LocalizedName)"
+              (click)="fahrenheitOrCelsius()"
               mat-fab
               color="primary"
               aria-label="Example icon button"
@@ -102,9 +105,9 @@
             </button>
           </div>
 
-          <div class="example-button-container" *ngIf="farOrCel === false">
+          <div class="example-button-container" *ngIf="!farOrCel">
             <button
-              (click)="fahrenheitOrCelsius(cityData[0].LocalizedName)"
+              (click)="fahrenheitOrCelsius()"
               mat-fab
               color="primary"
               aria-label="Example icon button"
@@ -116,7 +119,7 @@
       </mat-card>
     </div>
     <button
-      *ngIf="inFavorite === false"
+      *ngIf="!inFavorite"
       mat-raised-button
       color="primary"
       (click)="
@@ -132,18 +135,13 @@
     >
       <i class="fas fa-heart"></i> Add to favorit
     </button>
-    <button
-      *ngIf="inFavorite === true"
-      mat-raised-button
-      disabled
-      color="primary"
-    >
+    <button *ngIf="inFavorite" mat-raised-button disabled color="primary">
       <i class="fas fa-heart"></i> In Favorite
     </button>
   </div>
   <div
     class="cards"
-    *ngIf="dataForecasts !== null && cityData !== null && day === true"
+    *ngIf="dataForecasts !== null && cityData !== null && dayNight"
   >
     <mat-card
       class="card"
@@ -153,15 +151,15 @@
       *ngFor="let da of dataForecasts.DailyForecasts"
     >
       <h2>{{ da.Date | date: "MMMM d" }}</h2>
-      <p *ngIf="farOrCel === true">{{ da.Temperature.Maximum.Value }}&#8451;</p>
-      <p *ngIf="farOrCel === false">
-        {{ da.Temperature.Maximum.Value }}&#8457;
+      <p *ngIf="farOrCel">{{ da.Temperature.Maximum.Value }}&#8451;</p>
+      <p *ngIf="!farOrCel">
+        {{ da.Temperature.Maximum.Value * 1.8 + 32 | number: "1.1-1" }}&#8457;
       </p>
     </mat-card>
   </div>
   <div
     class="cards"
-    *ngIf="dataForecasts !== null && cityData !== null && night === true"
+    *ngIf="dataForecasts !== null && cityData !== null && !dayNight"
   >
     <mat-card
       class="card"
@@ -171,9 +169,9 @@
       *ngFor="let da of dataForecasts.DailyForecasts"
     >
       <h2>{{ da.Date | date: "MMMM d" }}</h2>
-      <p *ngIf="farOrCel === true">{{ da.Temperature.Minimum.Value }}&#8451;</p>
-      <p *ngIf="farOrCel === false">
-        {{ da.Temperature.Minimum.Value }}&#8457;
+      <p *ngIf="farOrCel">{{ da.Temperature.Minimum.Value }}&#8451;</p>
+      <p *ngIf="!farOrCel">
+        {{ da.Temperature.Minimum.Value * 1.8 + 32 | number: "1.1-1" }}&#8457;
       </p>
     </mat-card>
   </div>

@@ -8,7 +8,7 @@ import { WelcomeComponent } from "./welcome/welcome.component";
 const routes: Routes = [
   { path: "", component: WelcomeComponent },
   { path: "main", component: MainComponent },
-  { path: "location/:cityKey", component: MainComponent },
+  { path: "main/:cityKey", component: MainComponent },
   { path: "favorites", component: FavoriteComponent },
   { path: "**", component: PageNotFoundComponent },
 ];

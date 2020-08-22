@@ -14,10 +14,10 @@ export class WeatherApiService {
     );
   }
 
-  getWeather(cityKey, metric) {
+  getWeather(cityKey) {
     return this.http
       .get(
-        `https://dataservice.accuweather.com/forecasts/v1/daily/5day/${cityKey}?apikey=0EaIU0suqEyWJtFFS6qC7DavWg6GSofL&metric=${metric}`
+        `https://dataservice.accuweather.com/forecasts/v1/daily/5day/${cityKey}?apikey=0EaIU0suqEyWJtFFS6qC7DavWg6GSofL&metric=true`
       )
       .pipe(catchError(this.eh));
   }
@@ -37,6 +37,6 @@ export class WeatherApiService {
       .pipe(catchError(this.eh));
   }
   eh(error: HttpErrorResponse) {
-    return throwError(error || "server error heare");
+    return throwError(error || "server error ");
   }
 }

@@ -1,7 +1,7 @@
 import { Favorite } from "../../models/favorite";
 import * as FavoriteActions from "./favorite.actions";
-import * as _ from "lodash";
-const initialState = {
+
+const initialState: { favorite: Favorite[] } = {
   favorite: [],
 };
 
